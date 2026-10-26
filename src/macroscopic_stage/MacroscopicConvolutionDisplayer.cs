@@ -56,6 +56,11 @@ public partial class MacroscopicConvolutionDisplayer : MeshInstance3D, IMetaball
     /// </summary>
     public bool DisplayHierarchyLines { get; set; }
 
+    /// <summary>
+    ///   Fired once the final (UV unwrapped) mesh is in place, so it can be rigged
+    /// </summary>
+    public event Action? OnMeshFinalized;
+
     public bool Generating => uvGenerationStatus == UvGenerationStatus.Generating || texturizationTask != null;
 
     public override void _Ready()
@@ -219,6 +224,8 @@ public partial class MacroscopicConvolutionDisplayer : MeshInstance3D, IMetaball
 
     private void ApplyTextures(MetaballLayout<MacroscopicMetaball> layout)
     {
+        OnMeshFinalized?.Invoke();
+
         var photographable = new CreatureTexturePhotographable(Mesh, layout, desiredSkinType);
 
         texturizationTask = PhotoStudio.Instance.GenerateImage(photographable, 1, 2048);

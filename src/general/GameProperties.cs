@@ -173,6 +173,9 @@ public class GameProperties : IArchivable
 
         GameWorld.SetSpeciesInitialTolerances(finalSpecies, game.GameWorld.Map, null);
 
+        if (DevShots.ParseArgs().ContainsKey("dev-legs"))
+            CreatureLegs.MakeTestQuadruped(finalSpecies);
+
         game.EnterPrototypes();
 
         return game;

@@ -1112,6 +1112,10 @@ public class Settings
                 break;
         }
 
+        // Unattended test runs (DevShots) never take over the screen
+        if (DevShots.IsActive)
+            wantedMode = DisplayServer.WindowMode.Windowed;
+
         var windowModeChanged = mode != wantedMode;
 
         bool monitorChanged = false;

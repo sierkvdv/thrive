@@ -33,6 +33,8 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
     private MacroscopicConvolutionDisplayer metaballDisplayer = null!;
 
     private Node3D? buildingToPlaceGhost;
+
+    private CreatureLegs? legs;
 #pragma warning restore CA2213
 
     // TODO: a real system for determining the hand and equipment slots
@@ -163,6 +165,13 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
         base._Ready();
 
         metaballDisplayer = GetNode<MacroscopicConvolutionDisplayer>("MetaballDisplayer");
+
+        if (legs == null)
+        {
+            legs = new CreatureLegs { Name = "Legs" };
+            AddChild(legs);
+            metaballDisplayer.OnMeshFinalized += RigLegs;
+        }
     }
 
     /// <summary>
@@ -215,8 +224,16 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
         {
             if (MovementDirection != Vector3.Zero)
             {
+                // Legged creatures have a top speed set by their legs, the push fades out when reaching it
+                float push = 1;
+                if (legs is { LegCount: > 0 })
+                {
+                    var horizontalSpeed = (LinearVelocity with { Y = 0 }).Length();
+                    push = Math.Clamp((legs.MaxSpeed - horizontalSpeed) / (legs.MaxSpeed * 0.15f), 0, 1);
+                }
+
                 // TODO: movement force calculation
-                ApplyCentralImpulse(Mass * MovementDirection * (float)delta * 15 *
+                ApplyCentralImpulse(Mass * MovementDirection * (float)delta * 15 * push *
                     (Math.Clamp(Species.MuscularPower, 0, 1 * Mass) + 1));
             }
         }
@@ -270,6 +287,48 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
         metaballDisplayer.DisplayFromLayout(macroscopicSpecies.ModifiableBodyLayout);
 
         metaballDisplayer.Texturize(macroscopicSpecies.ModifiableBodyLayout, macroscopicSpecies.SkinType);
+
+        FitCollisionToLegs((MetaballLayout<MacroscopicMetaball>)macroscopicSpecies.ModifiableBodyLayout);
+    }
+
+    /// <summary>
+    ///   Rigs the final creature mesh and starts procedural walking when the body has legs
+    /// </summary>
+    private void RigLegs()
+    {
+        if (legs == null || Species == null)
+            return;
+
+        var layout = Species.ModifiableBodyLayout;
+
+        if (CreatureLegs.FindLegChains(layout).Count == 0)
+            return;
+
+        var rig = CreatureRig.Rig(metaballDisplayer, layout);
+        if (rig == null)
+            return;
+
+        legs.Setup(this, metaballDisplayer, rig.Value.Skeleton, rig.Value.Bones, layout);
+    }
+
+    /// <summary>
+    ///   Makes the collision capsule reach down to the feet so the legs carry the body
+    /// </summary>
+    private void FitCollisionToLegs(IReadOnlyList<MacroscopicMetaball> layout)
+    {
+        if (CreatureLegs.FindLegChains(layout).Count == 0)
+            return;
+
+        float bottom = layout.Min(m => m.Position.Y - m.Radius);
+        float top = layout.Max(m => m.Position.Y + m.Radius);
+        float halfWidth = layout.Max(m => MathF.Abs(m.Position.X) + m.Radius);
+
+        float height = top - bottom;
+        float radius = MathF.Min(halfWidth, height * 0.5f);
+
+        var shape = GetNode<CollisionShape3D>("CollisionShape3D");
+        shape.Shape = new CapsuleShape3D { Radius = radius, Height = MathF.Max(height, radius * 2) };
+        shape.Position = new Vector3(0, (top + bottom) * 0.5f, 0);
     }
 
     /// <summary>
