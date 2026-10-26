@@ -15,4 +15,12 @@ Geen neurale netwerken (daar is Oerbeest in vastgelopen; dat project blijft apar
 - Spelen: `Start-Thrive.cmd`. Start standaard exclusive fullscreen; F11 wisselt.
 - Saves/logs/instellingen: `%APPDATA%\Thrive` (logs\log.txt).
 - Starten vanuit de Claude-app: via `Invoke-CimMethod Win32_Process Create` (MSIX-schaduwmap).
+- `Start-Landbeest.cmd`: direct de landfase in met de testviervoeter (`dev-legs dev-land=2`).
+- Onzichtbaar testen met plaatjes (geen venster op Sierks schermen, OBS draait vaak):
+  `<godot>_console.exe --path . --position -6000,0 --resolution 1280x720 res://src/stage_starters/MacroscopicStageStarter.tscn -- devshot-dir=C:/pad devshot-times=10,14 dev-legs dev-land=3 dev-camyaw=1.5 dev-walk=12`
+  (src/engine/DevShots.cs; devshot-dir forceert windowed).
+
+## Ons werk (deel2)
+- Poten: `src/macroscopic_stage/CreatureRig.cs` (bot per metabal + huidgewichten), `CreatureLegs.cs` (pootketens vinden, voeten planten, draf, Godot `Fabrik3D`). Aangehaakt in `MacroscopicCreature` (rig na UV-unwrap, capsule tot de voeten, topsnelheid).
+- Bekend: beest is nog wit (textuur komt niet door), poten alleen als de editor-vorm ketens onder het lijf heeft.
 - Headless rooktest: `<godot>_console.exe --headless --path . --quit-after 900`.
