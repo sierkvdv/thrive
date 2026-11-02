@@ -107,6 +107,14 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
     [JsonProperty]
     public int FoodEaten { get; private set; }
 
+    /// <summary>
+    ///   Mated with a partner since the last evolution step (needed besides food before the next generation)
+    /// </summary>
+    [JsonProperty]
+    public bool HasMated { get; set; }
+
+    public bool ReadyToMate => FoodEaten >= FoodNeededToEvolve && !HasMated;
+
     public bool HasLegChains => CreatureLegs.FindLegChains(
         (MetaballLayout<MacroscopicMetaball>)Species.ModifiableBodyLayout).Count > 0;
 
@@ -211,7 +219,7 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
         base._Process(delta);
 
         // Growth: the species can evolve again after eating enough
-        OnReproductionStatus?.Invoke(this, FoodEaten >= FoodNeededToEvolve);
+        OnReproductionStatus?.Invoke(this, FoodEaten >= FoodNeededToEvolve && HasMated);
 
         UpdateActionStatus((float)delta);
     }
@@ -400,6 +408,7 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
     public void ResetGrowth()
     {
         FoodEaten = 0;
+        HasMated = false;
     }
 
     public void Eat()
@@ -482,6 +491,14 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
             // use the on press key thing to only trigger jumping once?
             ApplyCentralImpulse(new Vector3(0, 1, 0) * (float)delta * jumpStrength * Mass);
         }
+    }
+
+    /// <summary>
+    ///   Moves the swimming height target gradually towards a height (used by AI followers)
+    /// </summary>
+    public void SwimTowardsHeight(float height, double delta)
+    {
+        targetSwimLevel = Mathf.MoveToward(targetSwimLevel, height, upDownSwimSpeed * (float)delta);
     }
 
     public void SwimDownOrCrouch(double delta)

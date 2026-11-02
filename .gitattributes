@@ -38,3 +38,8 @@ project.godot text eol=lf
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 *.ogv filter=lfs diff=lfs merge=lfs -text
 *.res filter=lfs diff=lfs merge=lfs -text
+
+# Oerbeest assets (CC0, Poly Haven / Quaternius)
+assets/oerbeest/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+assets/oerbeest/**/*.bin filter=lfs diff=lfs merge=lfs -text
+assets/oerbeest/**/*.gltf filter=lfs diff=lfs merge=lfs -text

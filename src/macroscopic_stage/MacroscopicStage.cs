@@ -182,6 +182,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
 
             progressBarSystem.UpdatePlayerPosition(playerPosition);
 
+            UpdateOerbeestPartner(delta);
+
             // HUD.UpdateRadiationBar(compounds.GetCompoundAmount(Compound.Radiation),
             //     compounds.GetCapacityForCompound(Compound.Radiation), Constants.RADIATION_WARNING);
         }
@@ -852,42 +854,10 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
 
     private void SpawnLandPlaceholderObjects()
     {
-        // Ground plane
-        var ground = new StaticBody3D
-        {
-            PhysicsMaterialOverride = new PhysicsMaterial
-            {
-                Friction = 1,
-                Bounce = 0.1f,
-                Absorbent = true,
-                Rough = true,
-            },
-        };
-
-        ground.AddChild(new CollisionShape3D
-        {
-            Shape = new WorldBoundaryShape3D
-            {
-                Plane = new Plane(new Vector3(0, 1, 0), 0),
-            },
-        });
-
-        ground.AddChild(new MeshInstance3D
-        {
-            Mesh = new PlaneMesh
-            {
-                Size = new Vector2(400, 400),
-                Material = new StandardMaterial3D
-                {
-                    AlbedoTexture = GD.Load<Texture2D>("res://assets/textures/environment/Terrain_01_Albedo.png"),
-                    NormalEnabled = true,
-                    NormalTexture = GD.Load<Texture2D>("res://assets/textures/environment/Terrain_01_Normals.png"),
-                    Uv1Scale = new Vector3(42, 42, 42),
-                },
-            },
-        });
-
-        rootOfDynamicallySpawned.AddChild(ground);
+        // Oerbeest land: hills, coast, sea, scanned plants and wildlife (replaces the flat placeholder plane)
+        var world = new OerbeestWorld { Name = "OerbeestWorld" };
+        rootOfDynamicallySpawned.AddChild(world);
+        world.Build();
 
         CreatureFood.SpawnAround(rootOfDynamicallySpawned, Player?.GlobalPosition ?? Vector3.Zero, 25, true);
 
@@ -915,7 +885,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
                  })
         {
             // But create it as a resource entity so that it can be interacted with
-            SpawnHelpers.SpawnResourceEntity(rockResource, new Transform3D(Basis.Identity, position),
+            var onGround = position with { Y = OerbeestWorld.HeightAt(position.X, position.Z) };
+            SpawnHelpers.SpawnResourceEntity(rockResource, new Transform3D(Basis.Identity, onGround),
                 rootOfDynamicallySpawned, resourceScene, true);
         }
 
@@ -938,7 +909,7 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
             rootOfDynamicallySpawned.AddChild(tree);
             tree.GlobalTransform =
                 new Transform3D(new Basis(new Quaternion(new Vector3(0, 1, 0), MathF.PI * random.NextSingle())),
-                    position);
+                    position with { Y = OerbeestWorld.HeightAt(position.X, position.Z) });
 
             tree.AddToGroup(Constants.INTERACTABLE_GROUP);
         }
@@ -967,7 +938,7 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
     {
         // Intentionally not translated yet, part of our own prototype additions
         var message = player.FoodEaten >= MacroscopicCreature.FoodNeededToEvolve ?
-            "Genoeg gegeten! Open de editor om je soort te laten evolueren." :
+            "Genoeg gegeten! Zoek je partner (het beest met het hartje) om te paren." :
             $"Gegeten: {player.FoodEaten} / {MacroscopicCreature.FoodNeededToEvolve}";
 
         HUD.HUDMessages.ShowMessage(message, DisplayDuration.Short);

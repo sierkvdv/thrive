@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Thrive"
+config/name="Oerbeest"
 config/description="Thrive is an open source evolution simulation game. 
 Play as a microbe on an alien world trying to survive and adapt to your surroundings in order to thrive.
 
@@ -21,8 +21,8 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="Thrive"
 config/features=PackedStringArray("4.7", "C#")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="res://assets/misc/thrive_logo_big.png"
-config/icon="res://assets/misc/icon.png"
+boot_splash/image="res://assets/oerbeest/oerbeest_splash.png"
+config/icon="res://assets/oerbeest/oerbeest_icon.png"
 config/windows_native_icon="res://assets/misc/icon.ico"
 
 [audio]

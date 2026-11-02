@@ -175,10 +175,32 @@ public partial class DevShots : Node
             }
         }
 
-        if (args.TryGetValue("dev-walk", out var walk) && elapsed >= ParseFloat(walk))
+        // dev-walk=START[,END] walks forward, dev-gotopartner=SECONDS then walks to the partner
+        if (args.TryGetValue("dev-walk", out var walk))
         {
-            stage.Player.MovementDirection = new Vector3(0, 0, -1);
-            stage.Player.LookVector = new Vector3(0, 0, -1);
+            var walkTimes = walk.Split(',');
+            bool walking = elapsed >= ParseFloat(walkTimes[0]) &&
+                (walkTimes.Length < 2 || elapsed < ParseFloat(walkTimes[1]));
+
+            if (walking)
+            {
+                stage.Player.MovementDirection = new Vector3(0, 0, -1);
+                stage.Player.LookVector = new Vector3(0, 0, -1);
+            }
+        }
+
+        if (args.TryGetValue("dev-gotopartner", out var goTo) && elapsed >= ParseFloat(goTo))
+        {
+            var partner = stage.DevPartnerPosition;
+            if (partner != null)
+            {
+                var direction = (partner.Value - stage.Player.GlobalPosition) with { Y = 0 };
+                if (direction.Length() > 2)
+                {
+                    stage.Player.MovementDirection = direction.Normalized();
+                    stage.Player.LookVector = direction.Normalized();
+                }
+            }
         }
     }
 

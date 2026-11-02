@@ -111,8 +111,14 @@ public partial class ThriveFeedDisplayer : VBoxContainer
         loadingIndicator.Visible = false;
     }
 
+    private static readonly bool OwnGameShowsNews = false;
+
     public void CheckStartFetchNews(bool redoIfReady = false)
     {
+        // Our own game never shows the upstream news feed
+        if (!OwnGameShowsNews)
+            return;
+
         if (Settings.Instance.ThriveNewsFeedEnabled)
         {
             if (!redoIfReady && itemsCreated)

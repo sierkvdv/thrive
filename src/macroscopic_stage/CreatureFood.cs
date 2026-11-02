@@ -79,11 +79,21 @@ public partial class CreatureFood : Area3D
 
     private void MoveNear(Vector3 center)
     {
-        float angle = GD.Randf() * MathF.Tau;
-        float distance = (float)GD.RandRange(SpawnMinDistance, SpawnMaxDistance);
+        for (int attempt = 0; attempt < 30; ++attempt)
+        {
+            float angle = GD.Randf() * MathF.Tau;
+            float distance = (float)GD.RandRange(SpawnMinDistance, SpawnMaxDistance);
+            float x = center.X + MathF.Cos(angle) * distance;
+            float z = center.Z + MathF.Sin(angle) * distance;
 
-        baseY = onLand ? 0.5f : (float)GD.RandRange(-1.0, 2.5);
-        Position = new Vector3(center.X + MathF.Cos(angle) * distance, baseY, center.Z + MathF.Sin(angle) * distance);
+            // Berries lie on dry land of the Oerbeest world
+            if (onLand && !OerbeestWorld.IsDryLand(x, z))
+                continue;
+
+            baseY = onLand ? OerbeestWorld.HeightAt(x, z) + 0.5f : (float)GD.RandRange(-1.0, 2.5);
+            Position = new Vector3(x, baseY, z);
+            return;
+        }
     }
 
     private void OnBodyEntered(Node3D body)

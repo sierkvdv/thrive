@@ -150,6 +150,9 @@ public partial class MainMenu : NodeWithInput
 
     private Array<Node>? menuArray;
 
+    // Our own game (Oerbeest) skips the upstream studio intro video
+    private static readonly bool OwnGamePlaysUpstreamIntro = false;
+
     private bool introVideoPassed;
 
     private bool achievementErrorShown;
@@ -207,7 +210,8 @@ public partial class MainMenu : NodeWithInput
         RunMenuSetup();
 
         // Start the intro video
-        if (Settings.Instance.PlayIntroVideo && LaunchOptions.VideosEnabled && !IsReturningToMenu &&
+        if (OwnGamePlaysUpstreamIntro && Settings.Instance.PlayIntroVideo && LaunchOptions.VideosEnabled &&
+            !IsReturningToMenu &&
             SafeModeStartupHandler.AreVideosAllowed())
         {
             // Hide menu buttons to prevent them grabbing focus during intro video
@@ -227,10 +231,8 @@ public partial class MainMenu : NodeWithInput
         // Start this early here to make sure this is ready as soon as possible
         // In the case where patch notes take up the news feed, this is still not a complete waste as if the player
         // exits to the menu after playing a bit they'll see the news feed
-        if (Settings.Instance.ThriveNewsFeedEnabled)
-        {
-            ThriveNewsFeed.GetFeedContents();
-        }
+        // Our own game: never fetch the upstream Thrive news feed
+        
     }
 
     public override void _EnterTree()
@@ -361,8 +363,9 @@ public partial class MainMenu : NodeWithInput
         // Hide the website button container whenever anything else is pressed, and only display the social media icons
         // if a menu is visible
         websiteButtonsContainer.Visible = false;
-        socialMediaContainer.Visible = index != uint.MaxValue;
-        feedPositioner.Visible = index != uint.MaxValue;
+        // Our own game: no upstream social media links, news feed or patch notes
+        socialMediaContainer.Visible = false;
+        feedPositioner.Visible = false;
 
         // Allow disabling all the menus for going to the options menu
         if (index > menuArray.Count - 1 && index != uint.MaxValue)
