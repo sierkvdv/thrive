@@ -17,7 +17,14 @@ public partial class CreatureLegs : Node3D
     private float legLength = 1;
     private int steppingGroup = -1;
 
-    public bool Walking { get; set; } = true;
+    private readonly List<(int Bone, float Weight)> wiggleBones = new();
+    private Skeleton3D? wiggleSkeleton;
+    private float wigglePhase;
+
+    /// <summary>
+    ///   Legs only plant feet on land; in the water they hang along while the body wiggles
+    /// </summary>
+    public bool Walking => body is MacroscopicCreature { MovementMode: MovementMode.Walking } || body is not MacroscopicCreature;
 
     public int LegCount => legs.Count;
 
@@ -67,6 +74,46 @@ public partial class CreatureLegs : Node3D
         }
 
         return result;
+    }
+
+    /// <summary>
+    ///   Starting body for a creature that begins in the water: a small fish with a head, a tapering tail and two
+    ///   side fins (no legs yet, those are added in the editor)
+    /// </summary>
+    public static void MakeStarterFish(MacroscopicSpecies species)
+    {
+        var layout = species.ModifiableBodyLayout;
+        var cellType = species.ModifiableCellTypes.First();
+        layout.Clear();
+
+        MacroscopicMetaball Add(Metaball? parent, float size, Vector3 direction)
+        {
+            var metaball = new MacroscopicMetaball(cellType) { Size = size, ModifiableParent = parent };
+
+            metaball.Position = parent == null ?
+                Vector3.Zero :
+                parent.Position + direction.Normalized() * (parent.Radius + metaball.Radius) * 0.85f;
+
+            layout.Add(metaball);
+            return metaball;
+        }
+
+        var body = Add(null, 1.4f, Vector3.Zero);
+        var chest = Add(body, 1.25f, Vector3.Forward);
+        var head = Add(chest, 1.0f, new Vector3(0, 0.1f, -1));
+        Add(head, 0.55f, new Vector3(0, -0.15f, -1));
+
+        Add(chest, 0.5f, new Vector3(-1, -0.2f, 0.2f));
+        Add(chest, 0.5f, new Vector3(1, -0.2f, 0.2f));
+        Add(body, 0.6f, new Vector3(0, 1, 0.3f));
+
+        var tail = Add(body, 1.05f, Vector3.Back);
+        tail = Add(tail, 0.8f, Vector3.Back);
+        tail = Add(tail, 0.6f, Vector3.Back);
+        Add(tail, 0.5f, new Vector3(0, 0.5f, 1));
+        Add(tail, 0.5f, new Vector3(0, -0.5f, 1));
+
+        species.OnEdited();
     }
 
     /// <summary>
@@ -132,6 +179,8 @@ public partial class CreatureLegs : Node3D
         ik = null;
 
         var chains = FindLegChains(layout);
+        SetupWiggle(skeleton, bones, chains);
+
         if (chains.Count == 0)
             return;
 
@@ -189,6 +238,8 @@ public partial class CreatureLegs : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
+        UpdateWiggle((float)delta);
+
         if (ik == null || legs.Count == 0)
             return;
 
@@ -272,6 +323,54 @@ public partial class CreatureLegs : Node3D
             }
 
             leg.Target.GlobalPosition = position + Vector3.Up * leg.FootRadius;
+        }
+    }
+
+    /// <summary>
+    ///   The spine and tail behind the root get a travelling wave (swimming) or a gentle sway (walking)
+    /// </summary>
+    private void SetupWiggle(Skeleton3D skeleton, List<MacroscopicMetaball> bones,
+        List<List<MacroscopicMetaball>> legChains)
+    {
+        wiggleBones.Clear();
+        wiggleSkeleton = skeleton;
+
+        var root = bones.FirstOrDefault(b => b.Parent == null);
+        if (root == null)
+            return;
+
+        var legBalls = legChains.SelectMany(c => c).ToHashSet();
+        var behind = bones.Where(b => !legBalls.Contains(b) && b.Position.Z >= root.Position.Z - 0.01f)
+            .OrderBy(b => b.Position.Z).ToList();
+
+        float maxZ = behind.Count > 0 ? behind.Max(b => b.Position.Z) - root.Position.Z : 0;
+        if (maxZ < 0.1f)
+            return;
+
+        foreach (var ball in behind)
+        {
+            float weight = (ball.Position.Z - root.Position.Z) / maxZ;
+            wiggleBones.Add((bones.IndexOf(ball), 0.25f + weight));
+        }
+    }
+
+    private void UpdateWiggle(float delta)
+    {
+        if (wiggleSkeleton == null || wiggleBones.Count == 0 || !IsInstanceValid(wiggleSkeleton))
+            return;
+
+        float speed = (body.LinearVelocity with { Y = 0 }).Length();
+        bool swimming = !Walking;
+
+        float amplitude = swimming ? 0.28f * Math.Clamp(0.35f + speed / 3, 0.35f, 1) : 0.06f;
+        float frequency = swimming ? 2.5f + speed * 0.8f : 1.5f;
+        wigglePhase += delta * frequency;
+
+        for (int i = 0; i < wiggleBones.Count; ++i)
+        {
+            var (bone, weight) = wiggleBones[i];
+            float angle = MathF.Sin(wigglePhase - i * 0.9f) * amplitude * weight;
+            wiggleSkeleton.SetBonePoseRotation(bone, new Quaternion(Vector3.Up, angle));
         }
     }
 

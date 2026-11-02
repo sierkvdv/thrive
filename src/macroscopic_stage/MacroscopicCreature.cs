@@ -325,9 +325,7 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
 
         var layout = Species.ModifiableBodyLayout;
 
-        if (CreatureLegs.FindLegChains(layout).Count == 0)
-            return;
-
+        // Every creature gets a skeleton: legs walk, spines wiggle while swimming
         var rig = CreatureRig.Rig(metaballDisplayer, layout);
         if (rig == null)
             return;

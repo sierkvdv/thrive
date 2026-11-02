@@ -173,8 +173,15 @@ public class GameProperties : IArchivable
 
         GameWorld.SetSpeciesInitialTolerances(finalSpecies, game.GameWorld.Map, null);
 
+        // Oerbeest: a direct start begins as a small fish (dev-legs gives a walking test quadruped)
         if (DevShots.ParseArgs().ContainsKey("dev-legs"))
+        {
             CreatureLegs.MakeTestQuadruped(finalSpecies);
+        }
+        else
+        {
+            CreatureLegs.MakeStarterFish(finalSpecies);
+        }
 
         game.EnterPrototypes();
 
