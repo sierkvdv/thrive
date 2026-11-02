@@ -242,6 +242,14 @@ public partial class MetaballBodyEditorComponent :
         if (!Visible)
             return;
 
+        // Keep the editor floor under the lowest part of the body so it does not hide the legs
+        var ground = Editor.RootOfDynamicallySpawned.GetParent()?.GetNodeOrNull<Node3D>("Ground");
+        if (ground != null && editedMetaballs.Count > 0)
+        {
+            ground.Position = new Vector3(0,
+                MathF.Min(0, editedMetaballs.Min(m => m.Position.Y - m.Radius)), 0);
+        }
+
         var debugOverlays = DebugOverlays.Instance;
 
         if (debugOverlays.PerformanceMetricsVisible)
@@ -1033,6 +1041,61 @@ public partial class MetaballBodyEditorComponent :
         _ = position;
 
         return parent != null;
+    }
+
+    /// <summary>
+    ///   Adds a pair of legs (one chain per side) hanging below the body in one undoable action. The first press
+    ///   puts them at the front, the next ones as far as possible from the existing legs.
+    /// </summary>
+    private void OnAddLegPairPressed()
+    {
+        if (editedMetaballs.Count < 1)
+            return;
+
+        var existingChains = CreatureLegs.FindLegChains(editedMetaballs);
+        var legBalls = existingChains.SelectMany(c => c).ToHashSet();
+        var hips = existingChains.Select(c => (MacroscopicMetaball)c[0].Parent!).ToList();
+
+        var bodyBalls = editedMetaballs.Where(m => !legBalls.Contains(m)).ToList();
+        float maxX = bodyBalls.Max(m => MathF.Abs(m.Position.X));
+        var spine = bodyBalls.Where(m => MathF.Abs(m.Position.X) <= maxX * 0.6f + 0.01f).ToList();
+
+        var anchor = hips.Count == 0 ?
+            spine.OrderBy(m => m.Position.Z).First() :
+            spine.OrderByDescending(m => hips.Min(h => MathF.Abs(h.Position.Z - m.Position.Z))).First();
+
+        var cellType = GetEditedCellDataIfEdited(anchor.ModifiableCellType, true);
+        float legSize = Math.Clamp(anchor.Size * 0.5f, 0.4f, 1.2f);
+
+        var segments = new[]
+        {
+            (Size: legSize, Direction: new Vector3(1, -0.7f, 0)),
+            (Size: legSize * 0.85f, Direction: new Vector3(0.15f, -1, 0)),
+            (Size: legSize * 0.8f, Direction: new Vector3(0, -1, -0.35f)),
+        };
+
+        var actions = new List<EditorAction>();
+
+        foreach (var side in new[] { -1.0f, 1.0f })
+        {
+            var parent = anchor;
+
+            foreach (var (size, direction) in segments)
+            {
+                var metaball = new MacroscopicMetaball(cellType)
+                {
+                    ModifiableParent = parent,
+                    Size = size,
+                    Position = parent.Position + (direction * new Vector3(side, 1, 1)).Normalized() *
+                        (parent.Radius + size * 0.5f),
+                };
+
+                actions.Add(CreateAddCellAction(metaball, parent));
+                parent = metaball;
+            }
+        }
+
+        EnqueueAction(new CombinedEditorAction(actions));
     }
 
     private EditorAction CreateAddCellAction(MacroscopicMetaball metaball, MacroscopicMetaball parent)

@@ -91,8 +91,24 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
     [JsonProperty]
     public bool Dead { get; private set; }
 
+    /// <summary>
+    ///   Food pieces needed before the species can evolve in the editor again
+    /// </summary>
+    public const int FoodNeededToEvolve = 5;
+
     [JsonProperty]
     public Action<MacroscopicCreature>? OnDeath { get; set; }
+
+    /// <summary>
+    ///   Called after this creature ate a piece of food
+    /// </summary>
+    public Action<MacroscopicCreature>? OnAte { get; set; }
+
+    [JsonProperty]
+    public int FoodEaten { get; private set; }
+
+    public bool HasLegChains => CreatureLegs.FindLegChains(
+        (MetaballLayout<MacroscopicMetaball>)Species.ModifiableBodyLayout).Count > 0;
 
     [JsonProperty]
     public Action<MacroscopicCreature, bool>? OnReproductionStatus { get; set; }
@@ -194,8 +210,8 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
     {
         base._Process(delta);
 
-        // TODO: implement growth
-        OnReproductionStatus?.Invoke(this, true);
+        // Growth: the species can evolve again after eating enough
+        OnReproductionStatus?.Invoke(this, FoodEaten >= FoodNeededToEvolve);
 
         UpdateActionStatus((float)delta);
     }
@@ -383,7 +399,14 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
 
     public void ResetGrowth()
     {
-        // TODO: implement growth
+        FoodEaten = 0;
+    }
+
+    public void Eat()
+    {
+        ++FoodEaten;
+        GD.Print("Creature ate food, total ", FoodEaten);
+        OnAte?.Invoke(this);
     }
 
     public void Damage(float amount, string source)

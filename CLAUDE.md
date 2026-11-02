@@ -22,5 +22,10 @@ Geen neurale netwerken (daar is Oerbeest in vastgelopen; dat project blijft apar
 
 ## Ons werk (deel2)
 - Poten: `src/macroscopic_stage/CreatureRig.cs` (bot per metabal + huidgewichten), `CreatureLegs.cs` (pootketens vinden, voeten planten, draf, Godot `Fabrik3D`). Aangehaakt in `MacroscopicCreature` (rig na UV-unwrap, capsule tot de voeten, topsnelheid).
-- Bekend: beest is nog wit (textuur komt niet door), poten alleen als de editor-vorm ketens onder het lijf heeft.
+- Editor: knop "Pootpaar toevoegen" (`MetaballBodyEditorComponent.OnAddLegPairPressed`, 42 MP, undo via CombinedEditorAction); editorvloer zakt mee onder de poten.
+- Eten: `CreatureFood.cs` (gele bollen in water, rode bessen op land); 5 eten = editor open (`MacroscopicCreature.FoodEaten`, `ResetGrowth`).
+- Naar het land kan pas met poten (`MacroscopicHUD`, `HasLegChains`).
+- Kleur: witte soort krijgt bij overgang naar macroscopic groen + schubben (`GameWorld.ChangeSpeciesToMacroscopic`). Textuurcache `%APPDATA%\Thrive\cache\img` legen na kleur/shader-wijziging (kleur zit niet in de cache-sleutel).
+- Hele keten testen: `MacroscopicEditorStarter.tscn -- devshot-dir=... dev-editorlegs=8,2 dev-editorfinish=10 dev-land=19 dev-walk=22 dev-foodahead=..`.
+- Volledig spel vanaf de cel: `Start-Thrive.cmd` -> New Game. `Start-Landbeest.cmd` is alleen de testsprong naar het land.
 - Headless rooktest: `<godot>_console.exe --headless --path . --quit-after 900`.

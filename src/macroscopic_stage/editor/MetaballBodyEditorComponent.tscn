@@ -609,6 +609,11 @@ theme_override_font_sizes/font_size = 16
 disabled = true
 text = "DUPLICATE_TYPE"
 
+[node name="AddLegPair" type="Button" parent="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Structure/ScrollContainer/MarginContainer/PartsSelection/VBoxContainer" unique_id=1730452211]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Pootpaar toevoegen"
+
 [node name="Reproduction" type="PanelContainer" parent="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel" unique_id=1495333453]
 visible = false
 layout_mode = 2
@@ -936,6 +941,7 @@ grow_vertical = 2
 [connection signal="pressed" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Structure/ScrollContainer/MarginContainer/PartsSelection/VBoxContainer/HBoxContainer/Modify" to="." method="OnModifyCurrentCellTypePressed"]
 [connection signal="pressed" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Structure/ScrollContainer/MarginContainer/PartsSelection/VBoxContainer/HBoxContainer/Delete" to="." method="OnDeleteCellTypePressed"]
 [connection signal="pressed" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Structure/ScrollContainer/MarginContainer/PartsSelection/VBoxContainer/Duplicate" to="." method="OnTypeDuplicateStartPressed"]
+[connection signal="pressed" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Structure/ScrollContainer/MarginContainer/PartsSelection/VBoxContainer/AddLegPair" to="." method="OnAddLegPairPressed"]
 [connection signal="item_selected" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Appearance/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/OptionButton" to="." method="OnSkinTypeSelected"]
 [connection signal="OnTolerancesChanged" from="LeftPanel/HBoxContainer/MainPanel/VBoxContainer/MarginContainer/EditingPanel/Tolerance/ScrollContainer/MarginContainer/TolerancesEditor" to="." method="OnTolerancesEditorChangedData"]
 [connection signal="pressed" from="LeftPanel/HBoxContainer/VBoxContainer/RotateToolButton" to="." method="ChangeCurrentTransformTool" binds= [1]]

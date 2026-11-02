@@ -872,6 +872,16 @@ public class GameWorld : IArchivable
         // in case they want to place them later
         lateVersion.ModifiableCellTypes.AddRange(earlySpecies.ModifiableCellTypes);
 
+        // A plain white species looks unfinished as a creature: give it a natural colour and a scaly skin
+        foreach (var cellType in lateVersion.ModifiableCellTypes)
+        {
+            if (cellType.Colour is { R: > 0.95f, G: > 0.95f, B: > 0.95f })
+                cellType.Colour = new Color(0.42f, 0.58f, 0.33f);
+        }
+
+        if (lateVersion.SkinType == CreatureSkinType.Plain)
+            lateVersion.SkinType = CreatureSkinType.Scales;
+
         // Create initial metaball layout from the cell layout
         // TODO: improve this algorithm
 

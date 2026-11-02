@@ -74,6 +74,16 @@ public partial class MacroscopicHUD : CreatureStageHUDBase<MacroscopicStage>
             {
                 // Hide the land button when already on the land in the prototype
                 toLandButton.Visible = stage.Player!.MovementMode == MovementMode.Swimming;
+
+                // Like Spore: a species needs legs before it can walk onto land
+                if (toLandButton.Visible)
+                {
+                    bool hasLegs = stage.Player.HasLegChains;
+                    toLandButton.Disabled = !hasLegs;
+                    toLandButton.TooltipText = hasLegs ?
+                        string.Empty :
+                        "Je beest heeft poten nodig. Editor: Pootpaar toevoegen.";
+                }
             }
         }
         else

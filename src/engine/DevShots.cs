@@ -20,6 +20,9 @@ public partial class DevShots : Node
     private int shotIndex;
     private bool landDone;
     private bool cameraDone;
+    private bool foodDone;
+    private int editorLegsPressed;
+    private bool editorFinished;
 
     private static bool? isActive;
 
@@ -106,6 +109,41 @@ public partial class DevShots : Node
     /// </summary>
     private void RunStageHooks()
     {
+        var hookArgs = ParseArgs();
+
+        // dev-editorlegs=SECONDS,COUNT presses "add leg pair" in the macroscopic editor COUNT times
+        if (editorLegsPressed == 0 && hookArgs.TryGetValue("dev-editorlegs", out var legHook))
+        {
+            var parts = legHook.Split(',');
+            if (elapsed >= ParseFloat(parts[0]))
+            {
+                var editor = FindNode<MetaballBodyEditorComponent>(GetTree().Root);
+                if (editor != null)
+                {
+                    int count = parts.Length > 1 ? int.Parse(parts[1], CultureInfo.InvariantCulture) : 1;
+                    for (int i = 0; i < count; ++i)
+                        editor.Call("OnAddLegPairPressed");
+
+                    editorLegsPressed = count;
+
+                    // Show the body editor tab so the screenshots show the result
+                    FindNode<MacroscopicEditor>(GetTree().Root)?.Call("SetEditorTab", (int)EditorTab.CellEditor);
+                }
+            }
+        }
+
+        // dev-editorfinish=SECONDS confirms the editor (like pressing Confirm)
+        if (!editorFinished && hookArgs.TryGetValue("dev-editorfinish", out var finishAt) &&
+            elapsed >= ParseFloat(finishAt))
+        {
+            var macroEditor = FindNode<MacroscopicEditor>(GetTree().Root);
+            if (macroEditor != null)
+            {
+                editorFinished = true;
+                GD.Print("DevShots finishing editor: ", macroEditor.OnFinishEditing());
+            }
+        }
+
         var stage = GetTree().CurrentScene as MacroscopicStage;
         if (stage?.Player == null)
             return;
@@ -124,11 +162,40 @@ public partial class DevShots : Node
             stage.RotateCamera(ParseFloat(yaw), args.TryGetValue("dev-campitch", out var p) ? ParseFloat(p) : 0);
         }
 
+        if (!foodDone && args.TryGetValue("dev-foodahead", out var foodAt) && elapsed >= ParseFloat(foodAt))
+        {
+            foodDone = true;
+            int i = 0;
+            foreach (var food in GetTree().GetNodesInGroup(CreatureFood.GroupName))
+            {
+                if (i >= 8)
+                    break;
+
+                ((Node3D)food).GlobalPosition = stage.Player.GlobalPosition + new Vector3(0, 0.5f, -4 - 3 * i++);
+            }
+        }
+
         if (args.TryGetValue("dev-walk", out var walk) && elapsed >= ParseFloat(walk))
         {
             stage.Player.MovementDirection = new Vector3(0, 0, -1);
             stage.Player.LookVector = new Vector3(0, 0, -1);
         }
+    }
+
+    private static T? FindNode<T>(Node node)
+        where T : Node
+    {
+        if (node is T found)
+            return found;
+
+        foreach (var child in node.GetChildren())
+        {
+            var result = FindNode<T>(child);
+            if (result != null)
+                return result;
+        }
+
+        return null;
     }
 
     private static float ParseFloat(string value)

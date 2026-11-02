@@ -766,6 +766,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
 
         Player.OnReproductionStatus = OnPlayerReproductionStatusChanged;
 
+        Player.OnAte = OnPlayerAte;
+
         Player.RequestCraftingInterfaceFor = OnOpenCraftingInterfaceFor;
 
         PlayerCamera.FollowedNode = Player;
@@ -844,6 +846,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
         rigidBody.Position = new Vector3(3, 0, -15);
 
         rootOfDynamicallySpawned.AddChild(rigidBody);
+
+        CreatureFood.SpawnAround(rootOfDynamicallySpawned, Player?.GlobalPosition ?? Vector3.Zero, 25, false);
     }
 
     private void SpawnLandPlaceholderObjects()
@@ -884,6 +888,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
         });
 
         rootOfDynamicallySpawned.AddChild(ground);
+
+        CreatureFood.SpawnAround(rootOfDynamicallySpawned, Player?.GlobalPosition ?? Vector3.Zero, 25, true);
 
         // A not super familiar (different than underwater) rock strewn around for reference
         var rockResource = SimulationParameters.Instance.GetWorldResource("rock");
@@ -955,6 +961,16 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
     private void OnPlayerReproductionStatusChanged(MacroscopicCreature player, bool ready)
     {
         OnCanEditStatusChanged(ready);
+    }
+
+    private void OnPlayerAte(MacroscopicCreature player)
+    {
+        // Intentionally not translated yet, part of our own prototype additions
+        var message = player.FoodEaten >= MacroscopicCreature.FoodNeededToEvolve ?
+            "Genoeg gegeten! Open de editor om je soort te laten evolueren." :
+            $"Gegeten: {player.FoodEaten} / {MacroscopicCreature.FoodNeededToEvolve}";
+
+        HUD.HUDMessages.ShowMessage(message, DisplayDuration.Short);
     }
 
     private void ForwardInteractionSelectionToPlayer(IInteractableEntity entity, InteractionType interactionType)

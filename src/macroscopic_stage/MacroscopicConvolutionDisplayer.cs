@@ -226,6 +226,9 @@ public partial class MacroscopicConvolutionDisplayer : MeshInstance3D, IMetaball
     {
         OnMeshFinalized?.Invoke();
 
+        // The unwrap leaves the surface without a material, keep the vertex colours visible until the skin is done
+        Mesh.SurfaceSetMaterial(0, material);
+
         var photographable = new CreatureTexturePhotographable(Mesh, layout, desiredSkinType);
 
         texturizationTask = PhotoStudio.Instance.GenerateImage(photographable, 1, 2048);
