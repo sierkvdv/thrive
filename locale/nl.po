@@ -524,7 +524,7 @@ msgid "BECOME_MULTICELLULAR"
 msgstr "Wordt Meercellig ({0}/{1})"
 
 msgid "BEGIN_THRIVING"
-msgstr "Begin Thrive"
+msgstr "Begin Oerbeest"
 
 msgid "BEHAVIOUR"
 msgstr "Gedrag"
@@ -1299,11 +1299,11 @@ msgid "CONTINUE_AS_SPECIES"
 msgstr "[center]De game is echter nog niet afgelopen. Je kunt [b]doorgaan[/b] door over te schakelen naar het spelen van soort {0} met een populatie van {1}.[/center]"
 
 msgid "CONTINUE_THRIVING"
-msgstr "Ga door met Thrive"
+msgstr "Ga door met Oerbeest"
 
 msgid "CONTINUE_TO_PROTOTYPES"
 msgstr ""
-"[b]Je bent aan het einde gekomen van het “volledige” deel van Thrive.[/b]\n"
+"[b]Je bent aan het einde gekomen van het “volledige” deel van Oerbeest.[/b]\n"
 "\n"
 "Als je wilt, kun je doorgaan naar de [b]latere prototypes[/b] die bij het spel zijn inbegrepen.\n"
 "\n"
@@ -2062,7 +2062,7 @@ msgid "EASTEREGG_MESSAGE_16"
 msgstr "Een tip, bereid je voor voordat je een kern plaatst. Ze zijn duur om te plaatsen en te onderhouden."
 
 msgid "EASTEREGG_MESSAGE_17"
-msgstr "Leuk weetje: de amoebe jaagt en vangt prooien met ‘pootjes’ gemaakt van cytoplasma, pseudopodia genaamd. We willen die uiteindelijk ook in Thrive hebben."
+msgstr "Leuk weetje: de amoebe jaagt en vangt prooien met ‘pootjes’ gemaakt van cytoplasma, pseudopodia genaamd. We willen die uiteindelijk ook in Oerbeest hebben."
 
 msgid "EASTEREGG_MESSAGE_18"
 msgstr "Bacteriën kunnen sterker zijn dan ze lijken; ze zien er misschien klein uit, maar sommige kunnen zich in je lichaam nestelen en je op die manier doden!"
@@ -2083,7 +2083,7 @@ msgid "EASTEREGG_MESSAGE_6"
 msgstr "Een tip, soms is het beter om weg te rennen van andere cellen."
 
 msgid "EASTEREGG_MESSAGE_7"
-msgstr "Thrive is bedoeld als een simulatie van een buitenaardse planeet, dus verwacht niet dat je hier dezelfde wezens aantreft als hier op aarde!"
+msgstr "Oerbeest is bedoeld als een simulatie van een buitenaardse planeet, dus verwacht niet dat je hier dezelfde wezens aantreft als hier op aarde!"
 
 msgid "EASTEREGG_MESSAGE_8"
 msgstr "Tip: Bacteriën kunnen sterker zijn dan ze lijken. Ze zien er klein uit, maar sommigen van hen kunnen zich in je ingraven en je op die manier doden!"
@@ -2753,7 +2753,7 @@ msgid "FOSSILISATION"
 msgstr "Fossilizatie"
 
 msgid "FOSSILISATION_EXPLANATION"
-msgstr "Fossilizeer deze soort en sla het op in het museum. Je kunt het museum vanuit de Thriveopedia bezoeken. Je kunt de gefossilizeerde soort ook openen in de vrije bouwmodusbewerker."
+msgstr "Fossilizeer deze soort en sla het op in het museum. Je kunt het museum vanuit de Oerpedia bezoeken. Je kunt de gefossilizeerde soort ook openen in de vrije bouwmodusbewerker."
 
 msgid "FOSSILISATION_FAILED"
 msgstr "Fossilizeren Mislukt"
@@ -5262,7 +5262,7 @@ msgstr "GLES2 moduswaarschuwing"
 
 #, fuzzy
 msgid "OPENGL_MODE_WARNING_EXPLANATION"
-msgstr "Je gebruikt Thrive met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Thrive te laten runnen."
+msgstr "Je gebruikt Oerbeest met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Oerbeest te laten runnen."
 
 #, fuzzy
 msgid "OPEN_EVOLUTIONARY_TREE"
@@ -5550,10 +5550,10 @@ msgid "PATCH_NAME"
 msgstr "{0} {1}"
 
 msgid "PATCH_NOTES_LAST_PLAYED_INFO"
-msgstr "Je hebt op {0} voor het laatst Thrive gespeeld, er is één nieuwe uitgave sinds die tijd"
+msgstr "Je hebt op {0} voor het laatst Oerbeest gespeeld, er is één nieuwe uitgave sinds die tijd"
 
 msgid "PATCH_NOTES_LAST_PLAYED_INFO_PLURAL"
-msgstr "Je hebt op {0} voor het laatst Thrive gespeeld, er is waren {1} nieuwe uitgaven sinds die tijd"
+msgstr "Je hebt op {0} voor het laatst Oerbeest gespeeld, er is waren {1} nieuwe uitgaven sinds die tijd"
 
 #, fuzzy
 msgid "PATCH_NOTES_RECENT_BOUNDARY"
@@ -5600,11 +5600,11 @@ msgstr "Vreedzaam"
 
 #, fuzzy
 msgid "PENDING_ENDOSYMBIOSIS_EXPLANATION"
-msgstr "Je gebruikt Thrive met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Thrive te laten runnen."
+msgstr "Je gebruikt Oerbeest met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Oerbeest te laten runnen."
 
 #, fuzzy
 msgid "PENDING_ENDOSYMBIOSIS_EXPLANATION_MULTICELLULAR"
-msgstr "Je gebruikt Thrive met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Thrive te laten runnen."
+msgstr "Je gebruikt Oerbeest met GLES2. Dit is niet getest en zal hoogstwaarschijnlijk voor problemen veroorzaken. Update je drivers en/of forceer je AMD of Nvidia graphics om Oerbeest te laten runnen."
 
 msgid "PENDING_ENDOSYMBIOSIS_TITLE"
 msgstr ""
@@ -6253,7 +6253,7 @@ msgstr ""
 "Als je het probleem met het opstarten niet oplost zul je Thrive meerdere malen moeten starten en crashen om weer terug naar de veilige modus te gaan."
 
 msgid "SAFE_MODE_TITLE"
-msgstr "Thrive is in Veilige Modus Gestart"
+msgstr "Oerbeest is in Veilige Modus Gestart"
 
 msgid "SAVE"
 msgstr "Sla op"
@@ -6435,7 +6435,7 @@ msgstr "Selecteer Enzym:"
 
 #, fuzzy
 msgid "SELECT_MOVEMENT_MODE_TITLE"
-msgstr "Thrive is in Veilige Modus Gestart"
+msgstr "Oerbeest is in Veilige Modus Gestart"
 
 msgid "SELECT_OPTION"
 msgstr "Selecteer Een Optie"
@@ -6532,7 +6532,7 @@ msgid "SHOW_NEW_PATCH_NOTES"
 msgstr "Toon nieuwe patchnotities automatisch"
 
 msgid "SHOW_NEW_PATCH_NOTES_TOOLTIP"
-msgstr "Toon patchnotities van nieuwe Thrive uitgaven automatisch in het hoofdmenu"
+msgstr "Toon patchnotities van nieuwe Oerbeest uitgaven automatisch in het hoofdmenu"
 
 msgid "SHOW_TUTORIALS_IN_NEW_CURRENT_OPTION"
 msgstr "Toon instructies (in huidige spel)"
@@ -6551,7 +6551,7 @@ msgid "SHOW_UNSAVED_PROGRESS_WARNING_TOOLTIP"
 msgstr "Zet het waarschuwingsvenster voor niet opgeslagen voortgang bij het sluiten van het spel aan of uit."
 
 msgid "SHOW_WEB_NEWS_FEED"
-msgstr "Toon Thrive nieuwsfeed (wordt van het internet gedownload)"
+msgstr "Toon Oerbeest nieuwsfeed (wordt van het internet gedownload)"
 
 #, fuzzy
 msgid "SIDEROPHORE_ACTION_TOOLTIP"
@@ -7184,7 +7184,7 @@ msgid "THREADS"
 msgstr "Threads:"
 
 msgid "THRIVEOPEDIA"
-msgstr "Thriveopedia"
+msgstr "Oerpedia"
 
 msgid "THRIVEOPEDIA_CURRENT_WORLD_PAGE_TITLE"
 msgstr "Huidige Wereld"
@@ -7194,10 +7194,10 @@ msgstr "Fylogenetische stamboom"
 
 #, fuzzy
 msgid "THRIVEOPEDIA_EXTINCT_SPECIES_TEXT"
-msgstr "Open de Thriveopedia"
+msgstr "Open de Oerpedia"
 
 msgid "THRIVEOPEDIA_HINT_IN_GAME"
-msgstr "Open de Thriveopedia"
+msgstr "Open de Oerpedia"
 
 msgid "THRIVEOPEDIA_HOME_INFO"
 msgstr ""
@@ -8285,7 +8285,7 @@ msgid "VIEW_PATCH_NOTES"
 msgstr "Zie Patchnotities"
 
 msgid "VIEW_PATCH_NOTES_TOOLTIP"
-msgstr "Zie nu meest recente of alle Thrive patchnotities"
+msgstr "Zie nu meest recente of alle Oerbeest patchnotities"
 
 msgid "VIEW_PENDING_ACTIONS"
 msgstr ""
@@ -8330,7 +8330,7 @@ msgid "WAITING_FOR_AUTO_EVO"
 msgstr "Wachten op auto-evo:"
 
 msgid "WELCOME_TO_THRIVEOPEDIA"
-msgstr "Welkom bij de Thriveopedia"
+msgstr "Welkom bij de Oerpedia"
 
 msgid "WENT_EXTINCT_FROM_PLANET"
 msgstr "stierf uit op de planeet"
@@ -9816,7 +9816,7 @@ msgid "WIKI_REPRODUCTION_BUTTON"
 msgstr "Reproductie"
 
 msgid "WIKI_REPRODUCTION_INTRO"
-msgstr "Om vooruitgang te boeken in Thrive, moet je je soort laten evolueren in [b]editors[/b] en uitsterven voorkomen. Om dat te doen, moet je je [b]voortplanten[/b]."
+msgstr "Om vooruitgang te boeken in Oerbeest, moet je je soort laten evolueren in [b]editors[/b] en uitsterven voorkomen. Om dat te doen, moet je je [b]voortplanten[/b]."
 
 msgid "WIKI_REPRODUCTION_REPRODUCTION_IN_THE_MICROBE_STAGE"
 msgstr ""
@@ -9825,7 +9825,7 @@ msgid "WIKI_ROOT_BODY"
 msgstr ""
 
 msgid "WIKI_ROOT_HEADING"
-msgstr "Thrive In-Game Wiki"
+msgstr "Oerbeest In-Game Wiki"
 
 #, fuzzy
 msgid "WIKI_RUSTICYANIN_EFFECTS"

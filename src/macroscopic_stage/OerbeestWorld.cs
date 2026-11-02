@@ -53,6 +53,67 @@ public partial class OerbeestWorld : Node3D
         Wildlife.SpawnAll(this);
     }
 
+    public const float SeabedLevel = -9;
+
+    /// <summary>
+    ///   The sea floor for the water part: sand, boulders and big seaweed (scanned ferns and grass, tinted by the
+    ///   water colour)
+    /// </summary>
+    public void BuildSeabed()
+    {
+        var floor = new MeshInstance3D
+        {
+            Name = "SeaFloor",
+            Mesh = new PlaneMesh { Size = new Vector2(500, 500), SubdivideDepth = 1, SubdivideWidth = 1 },
+            Position = new Vector3(0, SeabedLevel, 0),
+            MaterialOverride = new StandardMaterial3D
+            {
+                AlbedoTexture = GD.Load<Texture2D>("res://assets/oerbeest/textures/aerial_beach_01_diff_2k.jpg"),
+                NormalEnabled = true,
+                NormalTexture = GD.Load<Texture2D>("res://assets/oerbeest/textures/aerial_beach_01_nor_gl_2k.jpg"),
+                Uv1Scale = new Vector3(40, 40, 40),
+                AlbedoColor = new Color(0.8f, 0.9f, 0.85f),
+            },
+        };
+
+        AddChild(floor);
+
+        var random = new RandomNumberGenerator { Seed = 99 };
+
+        var props = new (string Name, int Count, float MinScale, float MaxScale)[]
+        {
+            ("boulder_01", 40, 1.0f, 4.0f),
+            ("rock_07", 50, 1.5f, 4.5f),
+            ("rock_moss_set_01", 40, 1.5f, 3.5f),
+            ("fern_02", 160, 2.5f, 5.0f),
+            ("grass_medium_01", 300, 3.0f, 6.0f),
+            ("shrub_03", 40, 1.5f, 3.0f),
+        };
+
+        foreach (var prop in props)
+        {
+            var scene = LoadNature(prop.Name);
+            if (scene == null)
+                continue;
+
+            var transforms = new List<Transform3D>();
+            for (int i = 0; i < prop.Count; ++i)
+            {
+                float x = random.RandfRange(-150, 150);
+                float z = random.RandfRange(-150, 150);
+
+                if (x * x + z * z < 36)
+                    continue;
+
+                var basis = Basis.FromEuler(new Vector3(0, random.RandfRange(0, MathF.Tau), 0))
+                    .Scaled(Vector3.One * random.RandfRange(prop.MinScale, prop.MaxScale));
+                transforms.Add(new Transform3D(basis, new Vector3(x, SeabedLevel - 0.1f, z)));
+            }
+
+            AddMultiMeshes(scene, transforms);
+        }
+    }
+
     private static PackedScene? LoadNature(string name)
     {
         return GD.Load<PackedScene>($"{NatureFolder}{name}/{name}_2k.gltf");

@@ -360,6 +360,8 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
         // Reset all growth progress of the player
         Player.ResetGrowth();
 
+        AnnounceOerbeestGeneration();
+
         // TODO: HUD animation and loading screen
 
         if (!CurrentGame!.TutorialState.Enabled)
@@ -648,8 +650,9 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
                 var sky = worldEnvironmentNode.Environment.Sky;
                 var skyMaterial = (PanoramaSkyMaterial)sky.SkyMaterial;
 
+                // Oerbeest: the creature always lives in a sunlit coastal sea, the step before the land
                 skyMaterial.Panorama =
-                    GD.Load<Texture2D>(CurrentGame.GameWorld.Map.CurrentPatch.BiomeTemplate.Panorama);
+                    GD.Load<Texture2D>("res://assets/textures/background/panoramas/Tidepool.png");
             }
         }
 
@@ -660,7 +663,7 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
     {
         if (CurrentGame?.GameWorld.Map.CurrentPatch != null)
         {
-            worldLightNode.LightColor = CurrentGame.GameWorld.Map.CurrentPatch.BiomeTemplate.Sunlight.Colour;
+            worldLightNode.LightColor = new Color(1.0f, 0.96f, 0.88f);
         }
     }
 
@@ -845,11 +848,16 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
 
         visualsParent.AddChild(GD.Load<PackedScene>("res://assets/models/Iron5.tscn").Instantiate<Node3D>());
 
-        rigidBody.Position = new Vector3(3, 0, -15);
+        rigidBody.Position = new Vector3(40, -4, -55);
 
         rootOfDynamicallySpawned.AddChild(rigidBody);
 
         CreatureFood.SpawnAround(rootOfDynamicallySpawned, Player?.GlobalPosition ?? Vector3.Zero, 25, false);
+
+        // Oerbeest: a sandy sea floor with rocks and seaweed instead of an empty void
+        var seabed = new OerbeestWorld { Name = "OerbeestSeabed" };
+        rootOfDynamicallySpawned.AddChild(seabed);
+        seabed.BuildSeabed();
     }
 
     private void SpawnLandPlaceholderObjects()
@@ -909,7 +917,7 @@ public partial class MacroscopicStage : CreatureStageBase<MacroscopicCreature, D
             rootOfDynamicallySpawned.AddChild(tree);
             tree.GlobalTransform =
                 new Transform3D(new Basis(new Quaternion(new Vector3(0, 1, 0), MathF.PI * random.NextSingle())),
-                    position with { Y = OerbeestWorld.HeightAt(position.X, position.Z) });
+                    OerbeestTreePosition(position));
 
             tree.AddToGroup(Constants.INTERACTABLE_GROUP);
         }

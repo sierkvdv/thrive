@@ -63,6 +63,10 @@ public partial class MacroscopicHUD : CreatureStageHUDBase<MacroscopicStage>
 
         if (stage.HasPlayer)
         {
+            // Oerbeest keeps the creature stage screen clean: no microbe-style chemistry panels
+            environmentPanel.Visible = false;
+            compoundsPanel.Visible = false;
+
             UpdateAwakenButton(stage.Player!);
 
             // If the player is already in the awakening stage they can't move to land anymore

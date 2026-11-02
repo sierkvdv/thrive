@@ -23,6 +23,7 @@ public partial class DevShots : Node
     private bool foodDone;
     private int editorLegsPressed;
     private bool editorFinished;
+    private bool menuCalled;
 
     private static bool? isActive;
 
@@ -129,6 +130,17 @@ public partial class DevShots : Node
                     // Show the body editor tab so the screenshots show the result
                     FindNode<MacroscopicEditor>(GetTree().Root)?.Call("SetEditorTab", (int)EditorTab.CellEditor);
                 }
+            }
+        }
+
+        // dev-menucall=SECONDS,Method calls a main menu method (like pressing its button)
+        if (!menuCalled && hookArgs.TryGetValue("dev-menucall", out var menuCall))
+        {
+            var parts = menuCall.Split(',');
+            if (elapsed >= ParseFloat(parts[0]) && GetTree().CurrentScene is MainMenu menu)
+            {
+                menuCalled = true;
+                menu.Call(parts[1]);
             }
         }
 

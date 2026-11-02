@@ -231,13 +231,14 @@ offset_bottom = 217.0
 grow_horizontal = 2
 
 [node name="Logo" type="TextureRect" parent="MenuContainers/LogoCenterContainer" unique_id=1260823172]
-custom_minimum_size = Vector2(600, 194)
+custom_minimum_size = Vector2(560, 181)
 layout_mode = 2
 texture = ExtResource("10")
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="FeedPositioner" type="MarginContainer" parent="MenuContainers" unique_id=1232560905]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -311,6 +312,13 @@ focus_neighbor_bottom = NodePath("../LoadGame")
 focus_previous = NodePath(".")
 mouse_filter = 1
 text = "NEW_GAME"
+
+[node name="StartAsWaterCreature" type="Button" parent="MenuContainers/Menus/VBoxContainer/MainMenu" unique_id=1874411093]
+custom_minimum_size = Vector2(250, 40)
+layout_mode = 2
+tooltip_text = "Sla de cel- en meercellige fase over en begin als waterbeest"
+mouse_filter = 1
+text = "Begin als waterbeest"
 
 [node name="LoadGame" type="Button" parent="MenuContainers/Menus/VBoxContainer/MainMenu" unique_id=2073318211]
 custom_minimum_size = Vector2(250, 40)
@@ -663,6 +671,7 @@ AlwaysOverrideFocus = true
 SkipOverridingFocusForElements = [NodePath("../../../..")]
 
 [node name="SocialMedia" type="HBoxContainer" parent="MenuContainers" unique_id=640253740]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -981,6 +990,7 @@ DialogText = "ACHIEVEMENTS_LOAD_FAILED_DESCRIPTION"
 WindowTitle = "ACHIEVEMENTS_LOAD_FAILED"
 
 [connection signal="pressed" from="MenuContainers/Menus/VBoxContainer/MainMenu/NewGame" to="." method="NewGamePressed"]
+[connection signal="pressed" from="MenuContainers/Menus/VBoxContainer/MainMenu/StartAsWaterCreature" to="." method="OnStartAsWaterCreaturePressed"]
 [connection signal="pressed" from="MenuContainers/Menus/VBoxContainer/MainMenu/LoadGame" to="." method="LoadGamePressed"]
 [connection signal="pressed" from="MenuContainers/Menus/VBoxContainer/MainMenu/Options" to="." method="OptionsPressed"]
 [connection signal="pressed" from="MenuContainers/Menus/VBoxContainer/MainMenu/Tools" to="." method="ToolsPressed"]

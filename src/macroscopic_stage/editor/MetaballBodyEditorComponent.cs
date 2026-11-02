@@ -1065,7 +1065,7 @@ public partial class MetaballBodyEditorComponent :
             spine.OrderByDescending(m => hips.Min(h => MathF.Abs(h.Position.Z - m.Position.Z))).First();
 
         var cellType = GetEditedCellDataIfEdited(anchor.ModifiableCellType, true);
-        float legSize = Math.Clamp(anchor.Size * 0.5f, 0.4f, 1.2f);
+        float legSize = Math.Clamp(anchor.Size * 0.75f, 0.55f, 1.5f);
 
         var segments = new[]
         {

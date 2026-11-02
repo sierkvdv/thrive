@@ -783,6 +783,21 @@ public partial class MainMenu : NodeWithInput
             || modsInstalledButNotEnabledWarning.Visible || thanksDialog.Visible || lowPerformanceWarning.Visible;
     }
 
+    /// <summary>
+    ///   Oerbeest shortcut: skip the microbe and multicellular stages and start as a creature in the water
+    /// </summary>
+    private void OnStartAsWaterCreaturePressed()
+    {
+        GUICommon.Instance.PlayButtonPressSound();
+
+        TransitionManager.Instance.AddSequence(ScreenFade.FadeType.FadeOut, 0.3f, () =>
+        {
+            OnEnteringGame(false, false);
+            AchievementsManager.ReportNewGameStarted(false);
+            SceneManager.Instance.SwitchToScene(MainGameState.MacroscopicStage);
+        }, false);
+    }
+
     private void NewGamePressed()
     {
         GUICommon.Instance.PlayButtonPressSound();
@@ -897,7 +912,7 @@ public partial class MainMenu : NodeWithInput
     private void ViewSourceCodePressed()
     {
         GUICommon.Instance.PlayButtonPressSound();
-        OS.ShellOpen("https://github.com/Revolutionary-Games/Thrive");
+        OS.ShellOpen("https://github.com/sierkvdv/thrive");
     }
 
     private void QuitPressed()

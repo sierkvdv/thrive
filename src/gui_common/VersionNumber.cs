@@ -34,7 +34,7 @@ public partial class VersionNumber : Label
 
         if (info is not { DevBuild: true })
         {
-            Text = Constants.Version;
+            Text = $"Oerbeest 0.1 (Thrive {Constants.Version})";
             return;
         }
 

@@ -1213,16 +1213,12 @@ public class Settings
         CultureInfo cultureInfo;
 
         // Process locale info in case it isn't exactly right
+        // Oerbeest plays in Dutch unless a language was picked in the options
         if (string.IsNullOrEmpty(language))
-        {
-            language = DefaultLanguage;
-            cultureInfo = DefaultCulture;
-        }
-        else
-        {
-            language = GetSupportedLocale(language);
-            cultureInfo = GetCultureInfo(language);
-        }
+            language = "nl";
+
+        language = GetSupportedLocale(language);
+        cultureInfo = GetCultureInfo(language);
 
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;

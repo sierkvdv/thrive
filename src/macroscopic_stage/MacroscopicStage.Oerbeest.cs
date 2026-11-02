@@ -86,6 +86,31 @@ public partial class MacroscopicStage
         }
     }
 
+    private int oerbeestGeneration = 1;
+
+    /// <summary>
+    ///   The upstream interactable trees stood right at the spawn and blocked the view; spread them out over the land
+    /// </summary>
+    private static Vector3 OerbeestTreePosition(Vector3 original)
+    {
+        var spread = original * 2.2f;
+        if (!OerbeestWorld.IsDryLand(spread.X, spread.Z))
+            spread = original;
+
+        return spread with { Y = OerbeestWorld.HeightAt(spread.X, spread.Z) };
+    }
+
+    private void AnnounceOerbeestGeneration()
+    {
+        ++oerbeestGeneration;
+
+        double millionYears = (CurrentGame?.GameWorld.TotalPassedTime ?? 0) / 1_000_000;
+
+        HUD.HUDMessages.ShowMessage(
+            $"Generatie {oerbeestGeneration} – {millionYears:0} miljoen jaar evolutie. Eet, vind je partner en paar opnieuw.",
+            DisplayDuration.ExtraLong);
+    }
+
     private void SpawnOerbeestPartner()
     {
         if (Player == null || CurrentGame == null)
