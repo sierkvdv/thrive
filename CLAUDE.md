@@ -1,4 +1,4 @@
-# Thrive-fork: "deel 2 van Spore" (Sierk)
+# Oerbeest (Thrive-fork, "deel 2 van Spore", Sierk)
 
 Fork van Revolutionary-Games/Thrive (GPL-3; wat we erop bouwen blijft open-source).
 Doel: een Spore-achtig evolutiespel. Cel -> meercellig -> vis -> land, jij ontwerpt en paart je soort door de eeuwen.
@@ -12,7 +12,7 @@ Geen neurale netwerken (daar is Oerbeest in vastgelopen; dat project blijft apar
 - Godot 4.7.2 .NET: `..\godot-4.7.2-mono\` (Thrive eist exact deze versie, zie `Thrive.csproj`).
 - .NET 10 SDK via winget. Native libs: `dotnet run --project Scripts -- native Fetch Install`.
 - Bouwen: `dotnet build Thrive.csproj`. Assets importeren: `<godot>_console.exe --headless --import --path .` (eerste keer 2x draaien; eerste run crasht soms halverwege).
-- Spelen: `Start-Thrive.cmd`. Start standaard exclusive fullscreen; F11 wisselt.
+- Spelen: `Start-Oerbeest.cmd` of snelkoppeling `Desktop\Oerbeest.lnk`. Exclusive fullscreen; F11 wisselt. Menu-knop *Begin als waterbeest* slaat cel/meercellig over.
 - Saves/logs/instellingen: `%APPDATA%\Thrive` (logs\log.txt).
 - Starten vanuit de Claude-app: via `Invoke-CimMethod Win32_Process Create` (MSIX-schaduwmap).
 - `Start-Landbeest.cmd`: direct de landfase in met de testviervoeter (`dev-legs dev-land=2`).
@@ -27,5 +27,11 @@ Geen neurale netwerken (daar is Oerbeest in vastgelopen; dat project blijft apar
 - Naar het land kan pas met poten (`MacroscopicHUD`, `HasLegChains`).
 - Kleur: witte soort krijgt bij overgang naar macroscopic groen + schubben (`GameWorld.ChangeSpeciesToMacroscopic`). Textuurcache `%APPDATA%\Thrive\cache\img` legen na kleur/shader-wijziging (kleur zit niet in de cache-sleutel).
 - Hele keten testen: `MacroscopicEditorStarter.tscn -- devshot-dir=... dev-editorlegs=8,2 dev-editorfinish=10 dev-land=19 dev-walk=22 dev-foodahead=..`.
-- Volledig spel vanaf de cel: `Start-Thrive.cmd` -> New Game. `Start-Landbeest.cmd` is alleen de testsprong naar het land.
+- Volledig spel vanaf de cel: `Start-Oerbeest.cmd` -> Nieuw spel. `Start-Landbeest.cmd` is alleen de testsprong naar het land.
 - Headless rooktest: `<godot>_console.exe --headless --path . --quit-after 900`.
+
+## Oerbeest-laag (merk + wereld)
+- Merk: `assets/oerbeest/` (logo/splash/icoon via PIL), `project.godot` naam/splash/icoon, menu-logo in `MainMenu.tscn`, intro/nieuws/social uit (`MainMenu.cs`, `ThriveFeedDisplayer.cs`), versie-label, Nederlands standaard (`Settings.ApplyLanguageSettings`), "Thrive"->"Oerbeest" in `locale/en.po` + `nl.po` (credits/team/licentie-regels bewust NIET).
+- Wereld: `OerbeestWorld.cs` (HeightAt, terrein + HeightMapShape3D, zee, MultiMesh-natuur, zeebodem), `Wildlife.cs`, `MacroscopicStage.Oerbeest.cs` (partner/paren/generatie). Assets uit `oerbeest/RawAssets` (CC0), jpg/bin/gltf in LFS.
+- Test-hooks DevShots: `dev-menucall=T,Methode`, `dev-gotopartner=T`, `dev-walk=START,END`, `dev-editorlegs`, `dev-editorfinish`, `dev-foodahead`.
+- Repo: github.com/sierkvdv/thrive (openbaar), remote `mine`, branch `deel2` (default).

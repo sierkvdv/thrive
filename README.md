@@ -1,3 +1,33 @@
+# Oerbeest — van cel tot beest
+
+Een Spore-achtig evolutiespel: je begint als cel, wordt meercellig, zwemt als waterbeest, krijgt poten,
+kruipt het land op en ontwerpt elke generatie je soort opnieuw.
+
+Oerbeest is gebouwd op **[Thrive](https://github.com/Revolutionary-Games/Thrive)** van Revolutionary Games
+(GPL-3, open source). De cel- en meercellige fase zijn van Thrive; alles vanaf het waterbeest is waar wij aan bouwen.
+Hun credits en licentie blijven staan (zie onderaan en `LICENSE.txt`).
+
+## Wat is van Oerbeest (branch `deel2`)
+- **Poten die lopen**: elke keten bollen onder het lijf wordt een poot; voeten planten op de grond en stappen in draf
+  (`src/macroscopic_stage/CreatureRig.cs`, `CreatureLegs.cs`, Godot `Fabrik3D`).
+- **Beestenmaker**: knop *Pootpaar toevoegen* (`editor/MetaballBodyEditorComponent.cs`).
+- **Spelregels**: 5x eten → partner (hartje) zoeken → paren → editor voor de volgende generatie; naar het land
+  alleen met poten (`MacroscopicStage.Oerbeest.cs`, `CreatureFood.cs`).
+- **Wereld**: heuvels, kust, zee en zeebodem met gescande natuur van Poly Haven, wild = Quaternius-monsters
+  (`OerbeestWorld.cs`, `Wildlife.cs`, `assets/oerbeest/`, alles CC0).
+- **Eigen gezicht**: naam, logo, menu, Nederlands standaard, knop *Begin als waterbeest* (slaat cel/meercellig over).
+
+## Installeren (Windows)
+1. [Git](https://git-scm.com/) + `git lfs install`, dan `git clone https://github.com/sierkvdv/thrive.git` en `git checkout deel2`.
+2. [.NET 10 SDK](https://dotnet.microsoft.com/download) en **Godot 4.7.2 .NET** (de mono-versie, exact deze).
+3. In de map: `dotnet run --project Scripts -- native Fetch Install` en `dotnet build Thrive.csproj`.
+4. Open `project.godot` in Godot (eerste keer importeren duurt even) of start met `Start-Oerbeest.cmd`
+   (verwacht Godot in `..\godot-4.7.2-mono\`).
+
+Testhulp zonder scherm: zie `src/engine/DevShots.cs` (screenshots en automatische acties via `-- devshot-dir=...`).
+
+---
+
 Thrive
 ======
 
