@@ -23,9 +23,18 @@ public partial class MacroscopicStage
     public Vector3? DevPartnerPosition =>
         oerbeestPartner != null && IsInstanceValid(oerbeestPartner) ? oerbeestPartner.GlobalPosition : null;
     private float heartPulse;
+    private bool wildlifeHooked;
 
     private void UpdateOerbeestPartner(double delta)
     {
+        Wildlife.Player = Player;
+
+        if (!wildlifeHooked)
+        {
+            wildlifeHooked = true;
+            Wildlife.ShowMessage = text => HUD.HUDMessages.ShowMessage(text, DisplayDuration.Short);
+        }
+
         if (Player == null || Player.Species.MacroscopicType == MacroscopicSpeciesType.Awakened)
             return;
 

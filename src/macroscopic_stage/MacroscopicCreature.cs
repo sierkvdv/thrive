@@ -411,6 +411,19 @@ public partial class MacroscopicCreature : RigidBody3D, ICharacterInventory, IEn
         HasMated = false;
     }
 
+    /// <summary>
+    ///   A predator bite costs a piece of food
+    /// </summary>
+    /// <returns>True when food was lost</returns>
+    public bool LoseFood()
+    {
+        if (FoodEaten <= 0)
+            return false;
+
+        --FoodEaten;
+        return true;
+    }
+
     public void Eat()
     {
         ++FoodEaten;

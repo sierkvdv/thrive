@@ -24,6 +24,7 @@ public partial class DevShots : Node
     private int editorLegsPressed;
     private bool editorFinished;
     private bool menuCalled;
+    private bool predatorPlaced;
 
     private static bool? isActive;
 
@@ -201,6 +202,49 @@ public partial class DevShots : Node
             }
         }
 
+        // dev-predator=SECONDS puts a predator next to the player
+        if (!predatorPlaced && args.TryGetValue("dev-predator", out var predatorAt) &&
+            elapsed >= ParseFloat(predatorAt))
+        {
+            foreach (var node in FindAll<Wildlife>(GetTree().Root))
+            {
+                if (!node.IsPredator)
+                    continue;
+
+                predatorPlaced = true;
+                var spot = stage.Player.GlobalPosition + new Vector3(6, 0, 6);
+                spot.Y = OerbeestWorld.HeightAt(spot.X, spot.Z);
+                node.GlobalPosition = spot;
+                break;
+            }
+        }
+
+        // dev-hunt=SECONDS chases the nearest prey animal
+        if (args.TryGetValue("dev-hunt", out var huntAt) && elapsed >= ParseFloat(huntAt))
+        {
+            Node3D? nearest = null;
+            float best = float.MaxValue;
+            foreach (var node in FindAll<Wildlife>(GetTree().Root))
+            {
+                if (!node.IsPrey)
+                    continue;
+
+                float d = node.GlobalPosition.DistanceTo(stage.Player.GlobalPosition);
+                if (d < best)
+                {
+                    best = d;
+                    nearest = node;
+                }
+            }
+
+            if (nearest != null)
+            {
+                var direction = (nearest.GlobalPosition - stage.Player.GlobalPosition) with { Y = 0 };
+                stage.Player.MovementDirection = direction.Normalized();
+                stage.Player.LookVector = direction.Normalized();
+            }
+        }
+
         if (args.TryGetValue("dev-gotopartner", out var goTo) && elapsed >= ParseFloat(goTo))
         {
             var partner = stage.DevPartnerPosition;
@@ -230,6 +274,19 @@ public partial class DevShots : Node
         }
 
         return null;
+    }
+
+    private static System.Collections.Generic.IEnumerable<T> FindAll<T>(Node node)
+        where T : Node
+    {
+        if (node is T found)
+            yield return found;
+
+        foreach (var child in node.GetChildren())
+        {
+            foreach (var result in FindAll<T>(child))
+                yield return result;
+        }
     }
 
     private static float ParseFloat(string value)

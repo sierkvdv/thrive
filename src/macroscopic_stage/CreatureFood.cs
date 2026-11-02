@@ -12,11 +12,13 @@ public partial class CreatureFood : Area3D
 
     private static readonly Color WaterFoodColour = new(0.95f, 0.75f, 0.25f);
     private static readonly Color LandFoodColour = new(0.85f, 0.2f, 0.3f);
+    private static readonly Color MeatColour = new(0.55f, 0.18f, 0.12f);
 
     public const string GroupName = "creature_food";
 
     private MeshInstance3D visual = null!;
     private bool onLand;
+    private bool meat;
     private float bobTime;
     private float baseY;
 
@@ -31,6 +33,23 @@ public partial class CreatureFood : Area3D
             food.Setup(land);
             parent.AddChild(food);
             food.MoveNear(center);
+        }
+    }
+
+    /// <summary>
+    ///   Meat left behind by caught prey: eaten once, it does not come back
+    /// </summary>
+    public static void SpawnMeatAt(Node parent, Vector3 position, int count)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            var food = new CreatureFood { meat = true };
+            food.Setup(true);
+            parent.AddChild(food);
+
+            float x = position.X + (float)GD.RandRange(-1.2, 1.2);
+            float z = position.Z + (float)GD.RandRange(-1.2, 1.2);
+            food.Position = new Vector3(x, OerbeestWorld.HeightAt(x, z) + 0.4f, z);
         }
     }
 
@@ -54,7 +73,7 @@ public partial class CreatureFood : Area3D
 
         AddChild(new CollisionShape3D { Shape = new SphereShape3D { Radius = 0.9f } });
 
-        var colour = land ? LandFoodColour : WaterFoodColour;
+        var colour = meat ? MeatColour : land ? LandFoodColour : WaterFoodColour;
 
         visual = new MeshInstance3D
         {
@@ -102,6 +121,12 @@ public partial class CreatureFood : Area3D
             return;
 
         creature.Eat();
+
+        if (meat)
+        {
+            QueueFree();
+            return;
+        }
 
         // Not allowed to move physics objects while the physics callback is running
         var eaterPosition = creature.GlobalPosition;
