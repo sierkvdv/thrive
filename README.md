@@ -3,6 +3,8 @@
 Een Spore-achtig evolutiespel: je begint als cel, wordt meercellig, zwemt als waterbeest, krijgt poten,
 kruipt het land op en ontwerpt elke generatie je soort opnieuw.
 
+<img src="assets/oerbeest/screenshot_land.png" width="640" alt="Oerbeest landfase">
+
 Oerbeest is gebouwd op **[Thrive](https://github.com/Revolutionary-Games/Thrive)** van Revolutionary Games
 (GPL-3, open source). De cel- en meercellige fase zijn van Thrive; alles vanaf het waterbeest is waar wij aan bouwen.
 Hun credits en licentie blijven staan (zie onderaan en `LICENSE.txt`).
