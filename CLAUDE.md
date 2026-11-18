@@ -35,3 +35,6 @@ Geen neurale netwerken (daar is Oerbeest in vastgelopen; dat project blijft apar
 - Wereld: `OerbeestWorld.cs` (HeightAt, terrein + HeightMapShape3D, zee, MultiMesh-natuur, zeebodem), `Wildlife.cs`, `MacroscopicStage.Oerbeest.cs` (partner/paren/generatie). Assets uit `oerbeest/RawAssets` (CC0), jpg/bin/gltf in LFS.
 - Test-hooks DevShots: `dev-menucall=T,Methode`, `dev-gotopartner=T`, `dev-walk=START,END`, `dev-editorlegs`, `dev-editorfinish`, `dev-foodahead`.
 - Repo: github.com/sierkvdv/thrive (openbaar), remote `mine`, branch `deel2` (default).
+
+## Stand
+- 18-11-2026: laatste commit 02-11-2026 "Oerbeest: start als visje, zwemgolf door ruggengraat en staart, alle beesten krijgen een skelet" (branch `deel2`, upstream `mine/deel2`). Screenshots van die testrondes: `..\thrive-shots\` (26-10 t/m 02-11).
